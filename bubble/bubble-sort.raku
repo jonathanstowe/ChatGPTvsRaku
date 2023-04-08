@@ -1,11 +1,8 @@
-enum Order is export(<Less Same More>) {}
-
-sub bubble-sort(@array) returns @array {
-    loop (my $i = 0; $i < @array.end; $i++) {
-        for @array.keys -> $j {
-            next if $j == @array.end;  # skip last element
-            my $order = @array[$j] cmp @array[$j + 1];
-            if $order == Order::More {
+sub bubble-sort(@array) {
+    my $n = @array.elems;
+    for ^$n -> $i {
+        for ^($n - $i - 1) -> $j {
+            if @array[$j] cmp @array[$j + 1] == Order::More {
                 @array[$j, $j + 1] = @array[$j + 1, $j];
             }
         }

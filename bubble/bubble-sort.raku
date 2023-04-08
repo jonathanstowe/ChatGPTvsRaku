@@ -1,30 +1,31 @@
-sub bubble-sort(@array, &key-func = * ) {
-    my $n = @array.elems;
-    for my $i (0..^$n-1) -> $last_swap {
-        my $swapped = False;
-        for ($n - 1).reverse.grep($i ..^ *) -> $j {
-            if key-func(@array[$j]) < key-func(@array[$j - 1]) {
-                @array[$j, $j - 1] = @array[$j - 1, $j];
-                $swapped = True;
-                $last_swap = $j;
+sub bubble-sort(@array, &key-func = *{$^a}.&say, $order = Order::More) {
+    my @cache = map { key-func($_) }, @array;
+    my $size = @array.end;
+    for 0..$size -> $i {
+        for 0..^$size-$i -> $j {
+            my $left = @cache[$j];
+            my $right = @cache[$j + 1];
+            my $cmp = $order == Order::More
+                ?? $left cmp $right
+                !! $right cmp $left;
+            if $cmp == $order {
+                @cache[$j, $j + 1] = @cache[$j + 1, $j];
+                @array[$j, $j + 1] = @array[$j + 1, $j];
             }
         }
-        last unless $swapped;
     }
     return @array;
 }
 
 class Person {
-    has Str $.name;
+    has $.name;
     has Int $.age;
-    method Str { $!name }
 }
 
-my @people = Person.new(name => 'Alice', age => 25),
-             Person.new(name => 'Bob', age => 35),
-             Person.new(name => 'Charlie', age => 30);
+my @people = Person.new(name => 'Alice', age => 23),
+             Person.new(name => 'Bob', age => 19),
+             Person.new(name => 'Charlie', age => 42),
+             Person.new(name => 'Dave', age => 31);
 
-my @sorted-people = bubble-sort(@people, *.name);
-
-say $_.name for @sorted-people; # Alice Bob Charlie
+say bubble-sort(@people, &key-func = {.name}, $order = Order::Less).map(*.name);
 

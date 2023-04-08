@@ -1,9 +1,9 @@
-sub bubble-sort(@array, &key-func = * ) {
-    my $n = @array.elems;
-    for ^$n - 1 -> $i {
-        for $n - 1 ... $i + 1 -> $j {
-            if key-func(@array[$j - 1]) cmp key-func(@array[$j]) == More {
-                @array[$j, $j - 1] = @array[$j - 1, $j];
+sub bubble-sort(@array, &key-func = *{$^a}) {
+    my $length = @array.end;
+    for 0..^$length -> $i {
+        for $length ... $i + 1 ...^ $length -> $j {
+            if $key-func(@array[$j - 1]) cmp $key-func(@array[$j]) == More {
+                @array[$j - 1, $j] = @array[$j, $j - 1];
             }
         }
     }

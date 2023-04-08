@@ -1,16 +1,18 @@
-sub bubble-sort(@array, &key-func = *{$^a}) {
+sub bubble-sort(@array, &key-func = *{$^a}) is export {
     my $n = @array.elems;
-    loop (my $i = 0; $i < $n - 1; $i++) {
+    for my $i (0..^$n-1) {
         my $swapped = False;
-        for 1 ..^ $n - $i -> $j {
-            if (key-func(@array[$j - 1]) cmp More key-func(@array[$j])) {
-                @array[$j - 1, $j] = @array[$j, $j - 1];
+        for my $j (1..^$n-$i) {
+            my $k1 = @array[$j - 1];
+            my $k2 = @array[$j];
+            if key-func($k1) cmp key-func($k2) == More {
+                @array[$j - 1, $j] = $k2, $k1;
                 $swapped = True;
             }
         }
         last unless $swapped;
     }
-    @array;
+    return @array;
 }
 
 class Person {

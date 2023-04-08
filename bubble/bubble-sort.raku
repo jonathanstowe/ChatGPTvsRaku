@@ -1,17 +1,14 @@
 sub bubble-sort(@array, &key-func = *) {
-    my $size = @array.elems;
-
-    for my $i (0 ..^ $size) {
-        for my $j (1 ..^ $size - $i) {
-            my $a = @array[$j - 1];
-            my $b = @array[$j];
-
-            if key-func($a) cmp key-func($b) == More {
-                @array[$j - 1, $j] = @array[$j, $j - 1];
+    my $last = @array.end;
+    for 0 ..^ $last -> $i {
+        for reverse $i + 1 ..^ $last -> $j {
+            my $left  = @array[$j - 1];
+            my $right = @array[$j];
+            if key-func($left) cmp key-func($right) == More {
+                @array[$j - 1, $j] = $right, $left;
             }
         }
     }
-
     return @array;
 }
 
@@ -28,4 +25,4 @@ my @people = Person.new(name => "Alice", age => 25),
              Person.new(name => "Bob", age => 30),
              Person.new(name => "Charlie", age => 20);
 
-say bubble-sort(@people, *.age);
+say bubble-sort(@people, -> $v { $v.age } ).perl;

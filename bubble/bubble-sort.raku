@@ -1,12 +1,17 @@
 sub bubble-sort(@array, &key-func = *) {
-    my $length = @array.elems;
-    for 1..$length -> $i {
-        for reverse $i..$length - 1 -> $j {
-            if $key-func(@array[$j - 1]) cmp $key-func(@array[$j]) == More {
+    my $size = @array.elems;
+
+    for my $i (0 ..^ $size) {
+        for my $j (1 ..^ $size - $i) {
+            my $a = @array[$j - 1];
+            my $b = @array[$j];
+
+            if key-func($a) cmp key-func($b) == More {
                 @array[$j - 1, $j] = @array[$j, $j - 1];
             }
         }
     }
+
     return @array;
 }
 

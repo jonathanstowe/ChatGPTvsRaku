@@ -1,16 +1,13 @@
 sub bubble-sort(@array, &key-func = *) {
-    return @array unless @array.elems > 1;
-    loop (my $i = @array.elems - 1; $i > 0; $i--) {
-        my $swapped = False;
-        for 0 ..^ $i -> $j {
-            if (key-func(@array[$j]) cmp More key-func(@array[$j + 1])) {
+    my $size = @array.elems;
+    for 0..^$size -> $i {
+        for 0..^($size - $i - 1) -> $j {
+            if key-func(@array[$j]) cmp key-func(@array[$j + 1]) == More {
                 @array[$j, $j + 1] = @array[$j + 1, $j];
-                $swapped = True;
             }
         }
-        last unless $swapped;
     }
-    @array
+    @array;
 }
 
 class Person {

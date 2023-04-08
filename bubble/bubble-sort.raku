@@ -1,20 +1,15 @@
-sub bubble-sort(@array, &key-func = *) {
-    my $size = @array.elems;
-    my $last = $size - 1;
-
-    loop (my $i = 0; $i < $last; $i++) {
-        my $swaps = False;
-
-        for my $j (0 .. $last - $i - 1) {
-            if (key-func(@array[$j]) cmp key-func(@array[$j+1])) == More {
-                @array[$j,$j+1] = @array[$j+1,$j];
-                $swaps = True;
+sub bubble-sort(@array, &key-func = *{$^a}) {
+    my $n = @array.elems;
+    for my $i (0..^$n - 1) {
+        my $swapped = 0;
+        for my $j (0..^$n - $i - 1) {
+            if (key-func(@array[$j]) cmp key-func(@array[$j + 1]) == More) {
+                @array[$j, $j + 1] = @array[$j + 1, $j];
+                $swapped = 1;
             }
         }
-
-        last unless $swaps;
+        last unless $swapped;
     }
-
     @array;
 }
 

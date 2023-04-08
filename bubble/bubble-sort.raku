@@ -1,15 +1,17 @@
-sub bubble-sort(@array, &key-func = *.<key>) {
-    for ^@array.end -> $i {
-        my $swapped = False;
-        for ^@array.end - $i -> $j {
-            if key-func(@array[$j]) > key-func(@array[$j+1]) {
-                @array[$j], @array[$j+1] = @array[$j+1], @array[$j];
+sub bubble-sort(@array, &key-func = *{$^a}) {
+    my $n = @array.end;
+    my $swapped;
+    do {
+        $swapped = False;
+        for 1 ..^ $n -> $i {
+            if key-func(@array[$i-1]) More key-func(@array[$i]) {
+                @array[$i-1,$i] = @array[$i,$i-1];
                 $swapped = True;
             }
         }
-        last unless $swapped;
-    }
-    @array;
+        $n--;
+    } while $swapped && $n >= 0;
+    return @array;
 }
 
 class Person {

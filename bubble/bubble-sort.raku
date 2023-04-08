@@ -1,24 +1,33 @@
-sub bubble-sort(@list, &key-func = -> $x { $x }) {
-    my $size = @list.elems;
-    for 1..$size-1 -> $i {
-        for reverse $i..$size-1 -> $j {
-            if $key-func(@list[$j]) cmp $key-func(@list[$j-1]) == Order::Less {
-                @list[$j-1,$j] = @list[$j,$j-1];
+sub bubble-sort(@array, Code:D $key-func = { $^a }) {
+    my $n = @array.elems;
+    loop (my $i = 0; $i < $n - 1; $i++) {
+        my $swapped = False;
+        loop (my $j = 0; $j < $n - $i - 1; $j++) {
+            if $key-func(@array[$j]) cmp $key-func(@array[$j + 1]) == Order::More {
+                @array[$j], @array[$j + 1] = @array[$j + 1], @array[$j];
+                $swapped = True;
             }
         }
+        last unless $swapped;
     }
-    @list;
+    return @array;
 }
 
 class Person {
-    has $.name;
-    has $.age;
+    has Str $.name;
+    has Int $.age;
 }
 
-my @people = Person.new(name => 'Alice', age => 25),
-             Person.new(name => 'Bob', age => 35),
-             Person.new(name => 'Charlie', age => 20);
+my @people = Person.new(name => "Alice", age => 23),
+             Person.new(name => "Bob", age => 32),
+             Person.new(name => "Charlie", age => 18);
 
-my @sorted-people = bubble-sort(@people, { $_.age });
-say @sorted-people.map({ $_.name }); # prints "Charlie Bob Alice"
+my @people_sorted_by_name = bubble-sort(@people, &key-func({ $^person.name }));
+my @people_sorted_by_age = bubble-sort(@people, &key-func({ $^person.age }));
+
+say "People sorted by name:";
+say $_.name for @people_sorted_by_name;
+say "";
+say "People sorted by age:";
+say $_.name for @people_sorted_by_age;
 

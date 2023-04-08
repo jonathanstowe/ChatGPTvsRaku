@@ -1,13 +1,13 @@
-sub bubble-sort(@arr) {
-    my $n = @arr.elems;
-    for @arr.keys -> $i {
-        for ^($n - $i - 1) -> $j {
-            if @arr[$j] > @arr[$j + 1] {
-                @arr[$j], @arr[$j + 1] = @arr[$j + 1], @arr[$j];
+sub bubble-sort(@list) {
+    my $n = @list.elems;
+    for ^$n-1 -> $i {
+        for ^$n-$i-1 -> $j {
+            if @list[$j] > @list[$j+1] {
+                @list[$j, $j+1] = @list[$j+1, $j];
             }
         }
     }
-    return @arr;
+    return @list;
 }
 
 my @arr = (3, 1, 4, 1, 5, 9, 2, 6, 5, 3, 5);

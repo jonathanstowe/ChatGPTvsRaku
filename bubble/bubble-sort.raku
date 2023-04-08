@@ -1,13 +1,14 @@
 sub bubble-sort(@array, &key-func = *) {
-    my $size = @array.elems;
-    for 0..^$size -> $i {
-        for 0..^($size - $i - 1) -> $j {
-            if key-func(@array[$j]) cmp key-func(@array[$j + 1]) == More {
-                @array[$j, $j + 1] = @array[$j + 1, $j];
+    my $n = @array.elems;
+    my @pairs = @array.map({ $_ => &key-func($_) }); # create array of tuples
+    for 1..$n -> $i {
+        for reverse $i..^$n -> $j {
+            if @pairs[$j-1][1] cmp More @pairs[$j][1] { # compare keys
+                @pairs[$j-1], @pairs[$j] = @pairs[$j], @pairs[$j-1]; # swap tuples
             }
         }
     }
-    @array;
+    return @pairs.map(*[0]); # return sorted original values
 }
 
 class Person {

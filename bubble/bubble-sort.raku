@@ -1,15 +1,18 @@
-sub bubble-sort(@array, &key-func = *{$^a} <=> *{$^b}) {
-    my @tuples = map { $_, key-func($_) }, @array;
-    for ^@tuples.end -> $i {
-        for ^(@tuples.end - $i) -> $j {
-            if @tuples[$j; 1] > @tuples[$j + 1; 1] {
-                @tuples[$j, $j + 1] = @tuples[$j + 1, $j];
+sub bubble-sort(@array, &key-func = * ) {
+    my $n = @array.elems;
+    for my $i (0..^$n-1) -> $last_swap {
+        my $swapped = False;
+        for ($n - 1).reverse.grep($i ..^ *) -> $j {
+            if key-func(@array[$j]) < key-func(@array[$j - 1]) {
+                @array[$j, $j - 1] = @array[$j - 1, $j];
+                $swapped = True;
+                $last_swap = $j;
             }
         }
+        last unless $swapped;
     }
-    return @tuples>>[0];
+    return @array;
 }
-
 
 class Person {
     has Str $.name;

@@ -1,6 +1,6 @@
 sub bubble-sort(@arr) {
     my $n = @arr.elems;
-    for ^$n -> $i {
+    for @arr.keys -> $i {
         for ^($n - $i - 1) -> $j {
             if @arr[$j] > @arr[$j + 1] {
                 @arr[$j], @arr[$j + 1] = @arr[$j + 1], @arr[$j];

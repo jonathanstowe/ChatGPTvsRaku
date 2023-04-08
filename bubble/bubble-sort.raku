@@ -1,9 +1,12 @@
-sub bubble-sort(@array) {
-    my $n = @array.elems;
-    for 1..^$n -> $i {
-        for 0..^($n-$i) -> $j {
-            if (@array[$j] cmp @array[$j+1]) > 0 {
-                (@array[$j], @array[$j+1]) = (@array[$j+1], @array[$j]);
+enum Order is export(<Less Same More>) {}
+
+sub bubble-sort(@array) returns @array {
+    loop (my $i = 0; $i < @array.end; $i++) {
+        for @array.keys -> $j {
+            next if $j == @array.end;  # skip last element
+            my $order = @array[$j] cmp @array[$j + 1];
+            if $order == Order::More {
+                @array[$j, $j + 1] = @array[$j + 1, $j];
             }
         }
     }
